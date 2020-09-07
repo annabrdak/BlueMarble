@@ -1,0 +1,88 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<view:BasePage 
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="BlueMarble.View.MarbleByDate"
+    xmlns:view="clr-namespace:BlueMarble.View"
+    xmlns:sys="clr-namespace:System;assembly=mscorlib"
+    xmlns:local="clr-namespace:BlueMarble.MarkupExtensions"
+    xmlns:controls="clr-namespace:Refractored.XamForms.PullToRefresh;assembly=Refractored.XamForms.PullToRefresh"
+    Title="Browse by date">
+
+    <RelativeLayout>
+        <Image
+                Source="{local:EmbeddedImage BlueMarble.Images.background.jpg}"
+                Aspect="AspectFill"
+                RelativeLayout.WidthConstraint= "{ConstraintExpression Type=RelativeToParent, Property=Width}"
+                RelativeLayout.HeightConstraint= "{ConstraintExpression Type=RelativeToParent, Property=Height}"/>
+
+        
+        <StackLayout RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width}"
+                     RelativeLayout.HeightConstraint= "{ConstraintExpression Type=RelativeToParent, Property=Height}">
+            <StackLayout  >
+                <Frame HasShadow="True" Margin="5">
+                    <StackLayout  Orientation="Horizontal">
+                        <Label Margin="5" Text="Select Date:" VerticalOptions="Center"/>
+                        <DatePicker 
+                            Format="d MMM yyyy" 
+                            DateSelected="OnDateSelected"                            
+                            MaximumDate="{x:Static sys:DateTime.Now}" 
+                            HorizontalOptions="FillAndExpand"
+                            WidthRequest="100"
+                            
+                            />
+                    </StackLayout>
+                </Frame>
+                <Frame HasShadow="True" Margin="5" IsVisible="{Binding Visibility}" Opacity="0.7">
+                    <Label Text="No images found for selected date" />
+                </Frame>
+            </StackLayout>
+
+            <Image 
+                Source="{local:EmbeddedImage BlueMarble.Images.noconnection.png}" 
+                HorizontalOptions="Center" 
+                IsVisible="{Binding HasNoInternet}"/>
+
+            <Label 
+                Text="Check internet connection"
+                TextColor="White"
+                IsVisible="{Binding HasNoInternet}" 
+                HorizontalOptions="Center"/>
+
+            <StackLayout>
+                <CarouselView ItemsSource="{Binding Photos}" Margin="5" ItemsLayout="VerticalList">
+                    <CarouselView.ItemTemplate>
+                        <DataTemplate>
+                            <StackLayout Padding="5">
+                                <Frame
+                                    VerticalOptions="Center"
+                                    HorizontalOptions="Center"
+                                    HeightRequest="300"
+                                    WidthRequest="300"
+                                    Padding="0" 
+                                    HasShadow="false"
+                                    IsClippedToBounds="True"
+                                    CornerRadius="10"
+                                    >      
+                                    <StackLayout>
+                                        <ActivityIndicator 
+                                            IsRunning="{Binding Source={x:Reference imageButton}, Path=IsLoading}" 
+                                            IsVisible="{Binding Source={x:Reference imageButton}, Path=IsLoading}"/>
+                                        <ImageButton x:Name="imageButton"
+                                            Source="{Binding Image, StringFormat='http://epic.gsfc.nasa.gov/epic-archive/jpg/{0}.jpg'}" 
+                                            Aspect="AspectFit" Clicked="OnPhotoSelected"/>
+                                        
+                                    </StackLayout>
+                                </Frame>
+                            </StackLayout>
+                               
+                            
+                        </DataTemplate>
+                    </CarouselView.ItemTemplate>
+                  
+                </CarouselView>
+               
+            </StackLayout>
+        </StackLayout>           
+    </RelativeLayout>
+</view:BasePage>

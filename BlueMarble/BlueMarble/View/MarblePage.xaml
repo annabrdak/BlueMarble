@@ -1,0 +1,106 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<view:BasePage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="BlueMarble.View.MarblePage"
+             xmlns:view="clr-namespace:BlueMarble.View"
+             xmlns:local="clr-namespace:BlueMarble.MarkupExtensions"
+             xmlns:controls="clr-namespace:Refractored.XamForms.PullToRefresh;assembly=Refractored.XamForms.PullToRefresh"
+             Title="Latest images">
+
+    
+        <controls:PullToRefreshLayout
+            x:Name="pullToRefreshLayout"
+              IsPullToRefreshEnabled="True"
+              RefreshCommand="{Binding RefreshCommand}"
+              IsRefreshing="{Binding IsRefreshing}"
+              RefreshColor="Blue">
+            
+            <ScrollView>
+                <RelativeLayout>
+
+                    <Image 
+                Source="{local:EmbeddedImage BlueMarble.Images.background.jpg}"
+                Aspect="AspectFill"
+                RelativeLayout.WidthConstraint= "{ConstraintExpression Type=RelativeToParent, Property=Width}"
+                RelativeLayout.HeightConstraint= "{ConstraintExpression Type=RelativeToParent, Property=Height}"/>
+
+
+
+                    <StackLayout
+                RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width}"
+                RelativeLayout.HeightConstraint= "{ConstraintExpression Type=RelativeToParent, Property=Height}">
+
+                        <Image 
+                    Source="{local:EmbeddedImage BlueMarble.Images.noconnection.png}" 
+                    HorizontalOptions="Center" 
+                    IsVisible="{Binding HasNoInternet}"/>
+
+                        <Label 
+                        Text="Check internet connection"
+                        TextColor="White"
+                        IsVisible="{Binding HasNoInternet}" 
+                        HorizontalOptions="Center"/>
+
+                        <StackLayout>
+
+                            <CarouselView ItemsSource="{Binding Photos}" Margin="5" ItemsLayout="VerticalList">
+                                <CarouselView.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackLayout Padding="5">
+                                        <Frame
+                                        VerticalOptions="Center"
+                                        HorizontalOptions="Center"
+                                        HeightRequest="300"
+                                        WidthRequest="300"
+                                        Padding="0" 
+                                        HasShadow="false"
+                                        IsClippedToBounds="True"
+                                        CornerRadius="10"
+                                        >
+                                            <StackLayout>
+                                                <ActivityIndicator 
+                                            IsRunning="{Binding Source={x:Reference imageButton}, Path=IsLoading}" 
+                                            IsVisible="{Binding Source={x:Reference imageButton}, Path=IsLoading}"/>
+                                                <ImageButton x:Name="imageButton"
+                                            Source="{Binding Image, StringFormat='http://epic.gsfc.nasa.gov/epic-archive/jpg/{0}.jpg'}" 
+                                            Aspect="AspectFit" Clicked="OnPhotoSelected"/>
+
+                                            </StackLayout>
+                                        </Frame>
+                                    </StackLayout>
+
+
+                                </DataTemplate>
+                            </CarouselView.ItemTemplate>
+
+                        </CarouselView>
+
+                    </StackLayout>
+                    <!--<ListView  x:Name="marbleListView" ItemsSource="{Binding Photos}" ItemSelected="OnPhotoSelected" HasUnevenRows="True" >
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <Frame HasShadow="true" Margin="5">
+                                <StackLayout>
+                                    <StackLayout Orientation="Horizontal">
+                                        <Image Source="{Binding Image, StringFormat='http://epic.gsfc.nasa.gov/epic-archive/thumbs/{0}.jpg'}" />
+                                        <Label Text="{Binding Caption}" />
+                                    </StackLayout>
+                                    <Label Text="{Binding ParsedDate, StringFormat='{}{0:dd MMM yyyy}'}" HorizontalOptions="End"/>
+                                </StackLayout>
+                            </Frame>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>-->
+                </StackLayout>
+            </RelativeLayout>
+        </ScrollView>
+        
+          
+   
+    </controls:PullToRefreshLayout>
+   
+    
+
+</view:BasePage>

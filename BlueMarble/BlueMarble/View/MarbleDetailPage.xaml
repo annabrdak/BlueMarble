@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="BlueMarble.View.MarbleDetailPage"
+             Title="{Binding ParsedDate, StringFormat='{}{0:dd MMM yyyy}'}">
+    <ContentPage.Content>
+        <ScrollView>
+            <StackLayout Padding="5">
+                <ActivityIndicator IsRunning="{Binding Source={x:Reference image}, Path=IsLoading}" 
+                               IsVisible="{Binding Source={x:Reference image}, Path=IsLoading}" />
+                <Image x:Name="image" Source="{Binding Image, StringFormat='http://epic.gsfc.nasa.gov/epic-archive/jpg/{0}.jpg'}"/>
+                <StackLayout Padding="5">
+                    <Label Text="The satellite was looking at:"/>
+                    <Label Text="{Binding Path=CentroidCoordinates.Lat, StringFormat='Latitude: {0}'}"/>
+                    <Label Text="{Binding Path=CentroidCoordinates.Lon, StringFormat='Longitude: {0}'}"/>
+                </StackLayout>
+
+                <Button Text="See on map" Clicked="OpenMap"/>
+
+            </StackLayout>
+        </ScrollView>
+       
+
+    </ContentPage.Content>
+</ContentPage>
